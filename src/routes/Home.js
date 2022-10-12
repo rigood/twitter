@@ -6,7 +6,7 @@ import Tweet from "components/Tweet";
 const Home = ({ userObj }) => {
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState([]);
-  const [attachment, setAttachment] = useState(null);
+  const [attachment, setAttachment] = useState("");
   //   const getTweets = async () => {
   //     const dbTweets = await dbService.collection("tweets").get();
   //     dbTweets.forEach((document) => {
@@ -69,7 +69,7 @@ const Home = ({ userObj }) => {
   };
   const fileInput = useRef();
   const onClearAttachment = () => {
-    setAttachment(null);
+    setAttachment("");
     fileInput.current.value = null;
   };
   return (
