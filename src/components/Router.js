@@ -8,28 +8,26 @@ import Navigation from "components/Navigation";
 const AppRouter = ({ isLoggedIn }) => {
   return (
     <Router>
-      <React.StrictMode>
-        {isLoggedIn && <Navigation />}
-        <Switch>
-          {isLoggedIn ? (
-            <>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route exact path="/profile">
-                <Profile />
-              </Route>
-            </>
-          ) : (
-            <>
-              <Route exact path="/">
-                <Auth />
-              </Route>
-              <Redirect from="*" to="/" />
-            </>
-          )}
-        </Switch>
-      </React.StrictMode>
+      {isLoggedIn && <Navigation />}
+      <Switch>
+        {isLoggedIn ? (
+          <>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/profile">
+              <Profile />
+            </Route>
+          </>
+        ) : (
+          <>
+            <Route exact path="/">
+              <Auth />
+            </Route>
+            <Redirect from="*" to="/" />
+          </>
+        )}
+      </Switch>
     </Router>
   );
 };
