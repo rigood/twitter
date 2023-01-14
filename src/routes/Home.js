@@ -23,7 +23,10 @@ const Home = ({ userObj }) => {
       .collection("tweets")
       .orderBy("createdAt", "desc")
       .onSnapshot((snapshot) => {
-        const tweetArray = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const tweetArray = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setTweets(tweetArray);
       });
   }, []);
@@ -31,7 +34,9 @@ const Home = ({ userObj }) => {
     event.preventDefault();
     let attachmentUrl = "";
     if (attachment !== "") {
-      const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+      const attachmentRef = storageService
+        .ref()
+        .child(`${userObj.uid}/${uuidv4()}`);
       const response = await attachmentRef.putString(attachment, "data_url");
       attachmentUrl = await response.ref.getDownloadURL();
     }
@@ -44,6 +49,7 @@ const Home = ({ userObj }) => {
     await dbService.collection("tweets").add(tweetObj);
     setTweet("");
     setAttachment("");
+    fileInput.current.value = "";
   };
   const onChange = (event) => {
     const {
@@ -70,14 +76,25 @@ const Home = ({ userObj }) => {
   const fileInput = useRef();
   const onClearAttachment = () => {
     setAttachment("");
-    fileInput.current.value = null;
+    fileInput.current.value = "";
   };
   return (
     <>
       <div>
         <form onSubmit={onSubmit}>
-          <input value={tweet} onChange={onChange} type="text" placeholder="What's on your mind?" maxLength={120} />
-          <input type="file" accept="image/*" onChange={onFileChange} ref={fileInput} />
+          <input
+            value={tweet}
+            onChange={onChange}
+            type="text"
+            placeholder="What's on your mind?"
+            maxLength={120}
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFileChange}
+            ref={fileInput}
+          />
           <input type="submit" value="Tweet" />
           {attachment && (
             <div>
@@ -89,7 +106,11 @@ const Home = ({ userObj }) => {
       </div>
       <div>
         {tweets.map((tweet) => (
-          <Tweet key={tweet.id} tweetObj={tweet} isOwner={tweet.creatorId === userObj.uid} />
+          <Tweet
+            key={tweet.id}
+            tweetObj={tweet}
+            isOwner={tweet.creatorId === userObj.uid}
+          />
         ))}
       </div>
     </>
