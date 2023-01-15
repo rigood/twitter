@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { authService } from "fbase";
 import Loader from "components/Loader";
-import AppRouter from "./Router";
+import Router from "./Router";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +36,7 @@ function App() {
       {isLoading ? (
         <Loader />
       ) : (
-        <AppRouter
+        <Router
           isLoggedIn={Boolean(userObj)}
           userObj={userObj}
           refreshUser={refreshUser}
