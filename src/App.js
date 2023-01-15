@@ -32,7 +32,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="app-layout">
       {isLoading ? (
         <Loader />
       ) : (
@@ -42,7 +42,7 @@ function App() {
           refreshUser={refreshUser}
         />
       )}
-    </>
+    </div>
   );
 }
 
