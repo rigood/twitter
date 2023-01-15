@@ -1,11 +1,18 @@
 :root {
   --main-color: #1d9bf0;
+  --sub-color: #e8f5fd;
   --text-color: #0f1419;
   --sub-text-color: #536471;
   --outer-bg-color: #e1eef6;
   --inner-bg-color: #ffffff;
-  --border-color: #eff3f4;
-  --placeholder-color: #eff3f4;
+  --border-color: #e2e8eb;
   --area-hover-color: #f7f7f7;
-  --main-hover-color: #e1eef6;
+  --error-msg-color: #f4212e;
+  --google-bg-color: #d14e45;
+  --github-bg-color: #000000;
+  --radius-sm: 4px;
+  --radius-lg: 50px;
+  --fs-title: 2rem;
+  --fs-basic: 1rem;
+  --fs-button: 1.2rem;
 }

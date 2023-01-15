@@ -1,31 +1,28 @@
-import { authService, firebaseInstance } from "fbase";
+import { useState } from "react";
 import AuthForm from "components/AuthForm";
+import AuthSocialLogin from "components/AuthSocialLogin";
 
 const Auth = () => {
-  const onSocialClick = async (event) => {
-    const {
-      target: { name },
-    } = event;
-    let provider;
-    if (name === "google") {
-      provider = new firebaseInstance.auth.GoogleAuthProvider();
-    } else if (name === "github") {
-      provider = new firebaseInstance.auth.GithubAuthProvider();
-    }
-    await authService.signInWithPopup(provider);
-  };
+  const [isLoginPage, setIsLoginPage] = useState(true);
+  const toggleAuthPage = () => setIsLoginPage((prev) => !prev);
 
   return (
     <>
-      <AuthForm />
-      <div>
-        <button onClick={onSocialClick} name="google">
-          Continue with Google
-        </button>
-        <button onClick={onSocialClick} name="github">
-          Continue with Github
+      <div className="auth-header">
+        <img src="favicon.ico" alt="로고" />
+        <h1>{isLoginPage ? "로그인" : "회원가입"}</h1>
+      </div>
+
+      <AuthForm isNewAccount={!isLoginPage} />
+
+      <div className="auth-toggle">
+        <span>{isLoginPage ? "이미 회원이신가요?" : "처음이신가요?"}</span>
+        <button onClick={toggleAuthPage}>
+          {isLoginPage ? "회원가입" : "로그인"}
         </button>
       </div>
+
+      {isLoginPage && <AuthSocialLogin />}
     </>
   );
 };

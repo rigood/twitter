@@ -1,0 +1,27 @@
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px 0;
+}
+
+.auth-header img {
+  width: 30px;
+  margin-bottom: 30px;
+}
+
+.auth-header h1 {
+  font-size: var(--fs-title);
+  font-weight: 700;
+}
+
+.auth-toggle {
+  margin-bottom: 50px;
+  font-size: var(--fs-basic);
+}
+
+.auth-toggle button {
+  cursor: pointer;
+  color: var(--main-color);
+  margin-left: 3px;
+}
