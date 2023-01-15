@@ -1,5 +1,9 @@
 @import "https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css";
 @import "./variable.css";
+@import "./font.css";
+
+/* components */
+@import "./components/loader.css";
 
 * {
   box-sizing: border-box;
@@ -7,6 +11,9 @@
 
 body {
   background-color: var(--outer-bg-color);
+  font-family: "Pretendard";
+  font-weight: 400;
+  font-style: normal;
 }
 
 .app-layout {

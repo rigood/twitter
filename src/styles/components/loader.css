@@ -1,0 +1,26 @@
+.loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes boom {
+  0%,
+  100% {
+    transform: none;
+  }
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+.loader-img {
+  animation: boom 1s ease-in-out infinite;
+}
+
+.loader-text {
+  margin-top: 20px;
+  font-size: 1rem;
+  text-align: center;
+}
