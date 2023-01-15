@@ -5,7 +5,7 @@ import Router from "./Router";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [userObj, setUserObj] = useState(null);
+  const [userObj, setUserObj] = useState("");
 
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
@@ -16,7 +16,7 @@ function App() {
           updateProfile: (args) => user.updateProfile(args),
         });
       } else {
-        setUserObj(null);
+        setUserObj("");
       }
       setIsLoading(false);
     });
