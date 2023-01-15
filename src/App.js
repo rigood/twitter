@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { authService } from "fbase";
+import Loader from "components/Loader";
 import AppRouter from "./Router";
 
 function App() {
-  const [init, setInit] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [userObj, setUserObj] = useState(null);
 
   useEffect(() => {
@@ -17,7 +18,7 @@ function App() {
       } else {
         setUserObj(null);
       }
-      setInit(true);
+      setIsLoading(false);
     });
   }, []);
 
@@ -32,16 +33,15 @@ function App() {
 
   return (
     <>
-      {init ? (
+      {isLoading ? (
+        <Loader />
+      ) : (
         <AppRouter
           isLoggedIn={Boolean(userObj)}
           userObj={userObj}
           refreshUser={refreshUser}
         />
-      ) : (
-        "Initializing..."
       )}
-      <footer>&copy; {new Date().getFullYear()} Twitter</footer>
     </>
   );
 }
