@@ -8,7 +8,7 @@ import Auth from "routes/Auth";
 const Router = ({ isLoggedIn, userObj, refreshUser }) => {
   return (
     <HashRouter>
-      {isLoggedIn && <Navigation userObj={userObj} />}
+      {isLoggedIn && <Navigation />}
       <Switch>
         {isLoggedIn ? (
           <>
