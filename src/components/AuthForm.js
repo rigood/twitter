@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { authService } from "fbase";
 
 function AuthForm({ isNewAccount }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setEmail("");
+    setPassword("");
+    setError("");
+  }, [isNewAccount]);
 
   const onChange = (event) => {
     const {
