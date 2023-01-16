@@ -89,7 +89,7 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
     <div className="tweet">
       <div className="tweet-header">
         <div className="tweet-header__profile">
-          <img src="assets/default-profile.jpg" />
+          <img src={tweetObj.creatorPhotoUrl} />
         </div>
         <div className="tweet-header__info">
           <div className="tweet-header__info-username">

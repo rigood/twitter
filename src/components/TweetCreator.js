@@ -60,6 +60,7 @@ function TweetCreator({ userObj }) {
       createdAt: Date.now(),
       creatorId: userObj.uid,
       creatorName: userObj.displayName,
+      creatorPhotoUrl: userObj.photoURL,
       attachmentUrl,
     };
     await dbService.collection("tweets").add(tweetObj);
@@ -77,7 +78,7 @@ function TweetCreator({ userObj }) {
   return (
     <form onSubmit={onSubmit} className="creator-form">
       <div className="creator-profile">
-        <img src="assets/default-profile.jpg" />
+        <img src={userObj.photoURL} />
       </div>
       <div className="creator-write">
         <textarea

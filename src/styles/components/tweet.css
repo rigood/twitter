@@ -27,6 +27,7 @@
 .tweet-header__info {
   flex: 1;
   font-size: var(--fs-basic);
+  padding-top: 3px;
 }
 
 .tweet-header__info-username {

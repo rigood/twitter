@@ -13,7 +13,7 @@ function App() {
         setUserObj({
           uid: user.uid,
           displayName: user.displayName || "익명",
-          photoURL: user.photoURL,
+          photoURL: user.photoURL || "assets/default-profile.jpg",
           updateProfile: (args) => user.updateProfile(args),
         });
       } else {
