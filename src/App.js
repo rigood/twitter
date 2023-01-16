@@ -9,9 +9,10 @@ function App() {
 
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
+      console.log(user);
       if (user) {
         setUserObj({
-          displayName: user.displayName,
+          displayName: user.displayName || "익명",
           uid: user.uid,
           updateProfile: (args) => user.updateProfile(args),
         });

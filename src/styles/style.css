@@ -8,6 +8,7 @@
 @import "./components/authSocialLogin.css";
 @import "./components/navigation.css";
 @import "./components/tweetCreator.css";
+@import "./components/tweet.css";
 
 /* pages */
 @import "./pages/auth.css";
@@ -74,4 +75,5 @@ input:autofill:active {
   flex-direction: column;
   align-items: center;
   position: relative;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }

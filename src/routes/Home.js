@@ -27,6 +27,7 @@ const Home = ({ userObj }) => {
           <Tweet
             key={tweet.id}
             tweetObj={tweet}
+            userObj={userObj}
             isOwner={tweet.creatorId === userObj.uid}
           />
         ))}

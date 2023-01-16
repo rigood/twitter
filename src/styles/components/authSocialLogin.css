@@ -19,7 +19,7 @@
 
 .auth-social-login button:hover {
   cursor: pointer;
-  background-color: var(--area-hover-color);
+  background-color: var(--area-color);
 }
 
 .auth-social-login img {

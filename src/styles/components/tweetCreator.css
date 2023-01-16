@@ -41,9 +41,7 @@
 }
 
 .creator-write__preview img {
-  min-width: 50px;
   max-width: 90%;
-  min-height: 50px;
 }
 
 .creator-write__preview .creator-clear {
