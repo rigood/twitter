@@ -65,6 +65,7 @@ function TweetCreator({ userObj }) {
     await dbService.collection("tweets").add(tweetObj);
     setTweet("");
     setAttachment("");
+    setIsLengthValid(false);
     fileInputRef.current.value = "";
   };
 

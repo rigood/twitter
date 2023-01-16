@@ -9,11 +9,11 @@ function App() {
 
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
-      console.log(user);
       if (user) {
         setUserObj({
-          displayName: user.displayName || "익명",
           uid: user.uid,
+          displayName: user.displayName || "익명",
+          photoURL: user.photoURL,
           updateProfile: (args) => user.updateProfile(args),
         });
       } else {
@@ -28,6 +28,7 @@ function App() {
     setUserObj({
       displayName: user.displayName,
       uid: user.uid,
+      photoURL: user.photoURL,
       updateProfile: (args) => user.updateProfile(args),
     });
   };

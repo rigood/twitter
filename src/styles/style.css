@@ -9,6 +9,7 @@
 @import "./components/navigation.css";
 @import "./components/tweetCreator.css";
 @import "./components/tweet.css";
+@import "./components/profileEditor.css";
 
 /* pages */
 @import "./pages/auth.css";

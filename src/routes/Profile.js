@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { dbService } from "fbase";
 import Tweet from "components/Tweet";
+import ProfileEditor from "components/ProfileEditor";
 
 const Profile = ({ userObj, refreshUser }) => {
-  const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
-  const [tweets, setTweets] = useState([]);
+  const [myTweets, setMyTweets] = useState([]);
 
   const getMyTweets = async () => {
     await dbService
@@ -17,7 +17,7 @@ const Profile = ({ userObj, refreshUser }) => {
           id: doc.id,
           ...doc.data(),
         }));
-        setTweets(tweetArray);
+        setMyTweets(tweetArray);
       });
   };
 
@@ -25,43 +25,17 @@ const Profile = ({ userObj, refreshUser }) => {
     getMyTweets();
   }, []);
 
-  const onChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setNewDisplayName(value);
-  };
-
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    if (userObj.displayName !== newDisplayName) {
-      await userObj.updateProfile({
-        displayName: newDisplayName,
-      });
-      refreshUser();
-    }
-  };
-
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <input
-          type="text"
-          placeholder="Display name"
-          value={newDisplayName}
-          onChange={onChange}
+      <ProfileEditor userObj={userObj} refreshUser={refreshUser} />
+      {myTweets.map((tweet) => (
+        <Tweet
+          key={tweet.id}
+          tweetObj={tweet}
+          userObj={userObj}
+          isOwner={tweet.creatorId === userObj.uid}
         />
-        <input type="submit" value="Update Profile" />
-      </form>
-      <div>
-        {tweets.map((tweet) => (
-          <Tweet
-            key={tweet.id}
-            tweetObj={tweet}
-            isOwner={tweet.creatorId === userObj.uid}
-          />
-        ))}
-      </div>
+      ))}
     </>
   );
 };
