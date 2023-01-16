@@ -53,9 +53,9 @@
   color: white;
   font-size: var(--fs-button);
   font-weight: 700;
-  opacity: 0.3;
+  cursor: pointer;
 }
 
-.auth-submit:hover {
-  cursor: pointer;
+.auth-submit:disabled {
+  opacity: 0.3;
 }

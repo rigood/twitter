@@ -4,11 +4,15 @@ import { authService } from "fbase";
 function AuthForm({ isNewAccount }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     setEmail("");
     setPassword("");
+    setIsEmailValid(false);
+    setIsPasswordValid(false);
     setError("");
   }, [isNewAccount]);
 
@@ -17,9 +21,14 @@ function AuthForm({ isNewAccount }) {
       target: { name, value },
     } = event;
 
+    const emailRegex =
+      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
     if (name === "email") {
+      setIsEmailValid(emailRegex.test(value) ? true : false);
       setEmail(value);
     } else if (name === "password") {
+      setIsPasswordValid(value.length >= 6 ? true : false);
       setPassword(value);
     }
   };
@@ -64,6 +73,7 @@ function AuthForm({ isNewAccount }) {
             className="auth-input"
             placeholder="비밀번호"
             value={password}
+            minLength={6}
             onChange={onChange}
             required
           />
@@ -72,7 +82,11 @@ function AuthForm({ isNewAccount }) {
           </label>
         </div>
         {error && <div className="auth-error-msg">{error}</div>}
-        <button type="submit" className="auth-submit">
+        <button
+          type="submit"
+          className="auth-submit"
+          disabled={!isEmailValid || !isPasswordValid}
+        >
           {isNewAccount ? "가입" : "로그인"}
         </button>
       </form>
