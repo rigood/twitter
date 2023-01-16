@@ -31,7 +31,11 @@
 }
 
 .creator-write textarea:focus {
-  outline: 1px solid var(--main-color);
+  outline: 2px solid var(--main-color);
+}
+
+.creator-write textarea:focus::placeholder {
+  color: transparent;
 }
 
 .creator-write__preview {
@@ -104,9 +108,12 @@
   border-radius: var(--radius-sm);
   color: white;
   font-size: var(--fs-basic);
-  cursor: pointer;
 }
 
 .creator-submit:disabled {
   opacity: 0.5;
+}
+
+.creator-submit:enabled {
+  cursor: pointer;
 }
