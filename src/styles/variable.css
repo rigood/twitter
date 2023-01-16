@@ -6,13 +6,14 @@
   --outer-bg-color: #e1eef6;
   --inner-bg-color: #ffffff;
   --border-color: #e2e8eb;
-  --area-hover-color: #f7f7f7;
+  --area-hover-color: #eff3f4;
   --error-msg-color: #f4212e;
   --google-bg-color: #d14e45;
   --github-bg-color: #000000;
   --radius-sm: 4px;
   --radius-lg: 50px;
   --fs-title: 2rem;
-  --fs-basic: 1rem;
   --fs-button: 1.2rem;
+  --fs-basic: 1rem;
+  --fs-sm: 0.9rem;
 }

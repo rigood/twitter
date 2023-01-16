@@ -7,6 +7,7 @@
 @import "./components/authForm.css";
 @import "./components/authSocialLogin.css";
 @import "./components/navigation.css";
+@import "./components/tweetCreator.css";
 
 /* pages */
 @import "./pages/auth.css";
@@ -28,11 +29,13 @@ a {
 }
 
 button,
-input {
+input,
+textarea {
   color: inherit;
   font-family: inherit;
   font-size: inherit;
   border: none;
+  outline: none;
   background-color: transparent;
 }
 
