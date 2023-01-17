@@ -95,7 +95,12 @@ function ProfileEditor({ userObj, refreshUser }) {
           ref={fileInputRef}
           hidden
         />
-        <img src={newPhotoURL || "assets/default-profile.jpg"} />
+        <img
+          src={
+            newPhotoURL ||
+            process.env.PUBLIC_URL + "/assets/default-profile.jpg"
+          }
+        />
         {mode === "edit" && (
           <button className="editor-file" onClick={onFileClick}>
             <i className="fa-solid fa-image" />

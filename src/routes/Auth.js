@@ -9,7 +9,7 @@ const Auth = () => {
   return (
     <>
       <div className="auth-header">
-        <img src="favicon.ico" alt="로고" />
+        <img src={process.env.PUBLIC_URL + "/favicon.ico"} alt="로고" />
         <h1>{isLoginPage ? "로그인" : "회원가입"}</h1>
       </div>
 
