@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { authService } from "fbase";
 
-function AuthForm({ isNewAccount }) {
+function AuthForm({ isLoginPage }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -16,7 +16,7 @@ function AuthForm({ isNewAccount }) {
     setIsEmailValid(false);
     setIsPasswordValid(false);
     setError("");
-  }, [isNewAccount]);
+  }, [isLoginPage]);
 
   const onChange = (event) => {
     const {
@@ -39,10 +39,10 @@ function AuthForm({ isNewAccount }) {
     event.preventDefault();
 
     try {
-      if (isNewAccount) {
-        await authService.createUserWithEmailAndPassword(email, password);
-      } else {
+      if (isLoginPage) {
         await authService.signInWithEmailAndPassword(email, password);
+      } else {
+        await authService.createUserWithEmailAndPassword(email, password);
       }
     } catch (error) {
       setError(error.message);
@@ -93,7 +93,7 @@ function AuthForm({ isNewAccount }) {
           className="auth-submit"
           disabled={!isEmailValid || !isPasswordValid}
         >
-          {isNewAccount ? "가입" : "로그인"}
+          {isLoginPage ? "로그인" : "가입"}
         </button>
       </form>
     </>

@@ -13,7 +13,7 @@ const Auth = () => {
         <h1>{isLoginPage ? "로그인" : "회원가입"}</h1>
       </div>
 
-      <AuthForm isNewAccount={!isLoginPage} />
+      <AuthForm isLoginPage={isLoginPage} />
 
       <div className="auth-toggle">
         <span>{isLoginPage ? "이미 회원이신가요?" : "처음이신가요?"}</span>
