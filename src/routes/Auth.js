@@ -16,7 +16,7 @@ const Auth = () => {
       <AuthForm isLoginPage={isLoginPage} />
 
       <div className="auth-toggle">
-        <span>{isLoginPage ? "이미 회원이신가요?" : "처음이신가요?"}</span>
+        <span>{isLoginPage ? "처음이신가요?" : "이미 회원이신가요?"}</span>
         <button onClick={toggleAuthPage}>
           {isLoginPage ? "회원가입" : "로그인"}
         </button>
