@@ -31,6 +31,9 @@ const Profile = ({ userObj, refreshUser }) => {
           isOwner={tweet.creatorId === userObj.uid}
         />
       ))}
+      {myTweets.length === 0 && (
+        <div className="empty-msg">작성한 트윗이 없습니다.</div>
+      )}
     </>
   );
 };
