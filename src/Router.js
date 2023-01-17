@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
 import Navigation from "components/Navigation";
 import Home from "routes/Home";
 import Profile from "routes/Profile";
@@ -24,6 +24,7 @@ const Router = ({ isLoggedIn, userObj, refreshUser }) => {
             <Route exact path="/">
               <Auth />
             </Route>
+            <Redirect from="*" to="/" />
           </>
         )}
       </Switch>
