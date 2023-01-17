@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { authService } from "fbase";
 
 function AuthForm({ isNewAccount }) {
@@ -7,6 +7,8 @@ function AuthForm({ isNewAccount }) {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [error, setError] = useState("");
+
+  const passwordInputRef = useRef(null);
 
   useEffect(() => {
     setEmail("");
@@ -44,6 +46,9 @@ function AuthForm({ isNewAccount }) {
       }
     } catch (error) {
       setError(error.message);
+      setPassword("");
+      setIsPasswordValid(false);
+      passwordInputRef.current.focus();
     }
   };
 
@@ -76,6 +81,7 @@ function AuthForm({ isNewAccount }) {
             minLength={6}
             onChange={onChange}
             required
+            ref={passwordInputRef}
           />
           <label htmlFor="password" className="auth-label">
             비밀번호
