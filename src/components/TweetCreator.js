@@ -78,7 +78,12 @@ function TweetCreator({ userObj }) {
   return (
     <form onSubmit={onSubmit} className="creator-form">
       <div className="creator-profile">
-        <img src={userObj.photoURL} />
+        <img
+          src={
+            userObj.photoURL ||
+            process.env.PUBLIC_URL + "/assets/default-profile.jpg"
+          }
+        />
       </div>
       <div className="creator-write">
         <textarea
