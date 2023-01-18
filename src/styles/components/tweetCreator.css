@@ -83,9 +83,6 @@
   justify-content: center;
   align-items: center;
   padding: 5px;
-}
-
-.creator-button:hover {
   cursor: pointer;
 }
 

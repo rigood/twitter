@@ -15,11 +15,13 @@
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
   font-size: var(--fs-basic);
+  cursor: pointer;
 }
 
-.auth-social-login button:hover {
-  cursor: pointer;
-  background-color: var(--area-color);
+@media (hover: hover) {
+  .auth-social-login button:hover {
+    background-color: var(--area-color);
+  }
 }
 
 .auth-social-login img {

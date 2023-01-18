@@ -52,12 +52,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
-.tweet-header__menu-icon:hover {
-  cursor: pointer;
-  background-color: var(--sub-color);
-  color: var(--main-color);
+@media (hover: hover) {
+  .tweet-header__menu-icon:hover {
+    background-color: var(--sub-color);
+    color: var(--main-color);
+  }
 }
 
 .tweet-main {
