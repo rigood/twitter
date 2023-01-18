@@ -4,7 +4,15 @@ import { dbService, storageService } from "fbase";
 
 function getDate(milliseconds) {
   const date = new Date(milliseconds);
-  return date.toLocaleString();
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    weekday: "short",
+    hour: "numeric",
+    minute: "numeric",
+  };
+  return date.toLocaleString("ko-KR", options);
 }
 
 const Tweet = ({ tweetObj, userObj, isOwner }) => {
