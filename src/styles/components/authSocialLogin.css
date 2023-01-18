@@ -18,7 +18,7 @@
   cursor: pointer;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .auth-social-login button:hover {
     background-color: var(--area-color);
   }

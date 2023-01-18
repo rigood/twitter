@@ -55,7 +55,7 @@
   cursor: pointer;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .tweet-header__menu-icon:hover {
     background-color: var(--sub-color);
     color: var(--main-color);
