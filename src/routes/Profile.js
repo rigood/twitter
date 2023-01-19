@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import styled from "styled-components";
 import { dbService } from "fbase";
 import Tweet from "components/Tweet";
 import ProfileEditor from "components/ProfileEditor";
@@ -9,7 +10,7 @@ const Profile = ({ userObj, refreshUser }) => {
   useEffect(() => {
     dbService
       .collection("tweets")
-      .where("creatorId", "==", userObj.uid)
+      .where("creatorId", "==", userObj.id)
       .orderBy("createdAt", "desc")
       .onSnapshot((snapshot) => {
         const tweetArray = snapshot.docs.map((doc) => ({
@@ -28,14 +29,17 @@ const Profile = ({ userObj, refreshUser }) => {
           key={tweet.id}
           tweetObj={tweet}
           userObj={userObj}
-          isOwner={tweet.creatorId === userObj.uid}
+          isOwner={tweet.creatorId === userObj.id}
         />
       ))}
-      {myTweets.length === 0 && (
-        <div className="empty-msg">작성한 트윗이 없습니다.</div>
-      )}
+      {myTweets.length === 0 && <EmptyMsg>작성한 트윗이 없습니다.</EmptyMsg>}
     </>
   );
 };
 
 export default Profile;
+
+const EmptyMsg = styled.div`
+  margin: 50px auto;
+  font-size: var(--fs-lg);
+`;

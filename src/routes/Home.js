@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { dbService } from "fbase";
 import Tweet from "components/Tweet";
 import TweetCreator from "components/TweetCreator";
@@ -28,7 +28,7 @@ const Home = ({ userObj }) => {
             key={tweet.id}
             tweetObj={tweet}
             userObj={userObj}
-            isOwner={tweet.creatorId === userObj.uid}
+            isOwner={tweet.creatorId === userObj.id}
           />
         ))}
       </>

@@ -1,18 +1,10 @@
-@import "https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css";
-@import "./variable.css";
-@import "./font.css";
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
+import "./font.css";
+import "./variables.css";
 
-/* components */
-@import "./components/loader.css";
-@import "./components/authForm.css";
-@import "./components/authSocialLogin.css";
-@import "./components/navigation.css";
-@import "./components/tweetCreator.css";
-@import "./components/tweet.css";
-@import "./components/profileEditor.css";
-
-/* pages */
-@import "./pages/auth.css";
+const GlobalStyle = createGlobalStyle`
+${reset}
 
 * {
   box-sizing: border-box;
@@ -65,21 +57,6 @@ input:autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-.app-layout {
-  width: 100%;
-  max-width: 480px;
-  height: 100%;
-  min-height: 100vh;
-  margin: 0 auto;
-  background-color: var(--inner-bg-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-}
+`;
 
-.empty-msg {
-  font-size: var(--fs-lg);
-  margin: 50px 0;
-}
+export default GlobalStyle;

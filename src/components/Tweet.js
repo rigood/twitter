@@ -1,6 +1,14 @@
 import { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { dbService, storageService } from "fbase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPencil,
+  faTrashCan,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import TweetToolbar from "./TweetToolbar";
 
 function getDate(milliseconds) {
   const date = new Date(milliseconds);
@@ -19,6 +27,7 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTweet, setNewTweet] = useState(tweetObj.text);
   const [newAttachment, setNewAttachment] = useState(tweetObj.attachmentUrl);
+  const [isLengthValid, setIsLengthValid] = useState(true);
 
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -34,6 +43,13 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
     const {
       target: { value },
     } = event;
+
+    if (value !== "") {
+      setIsLengthValid(true);
+    } else {
+      setIsLengthValid(false);
+    }
+
     setNewTweet(value);
   };
 
@@ -45,7 +61,9 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
     const {
       target: { files },
     } = event;
+
     const theFile = files[0];
+
     const reader = new FileReader();
     reader.onloadend = (finishedEvent) => {
       const {
@@ -53,12 +71,13 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
       } = finishedEvent;
       setNewAttachment(result);
     };
+
     if (theFile) {
       reader.readAsDataURL(theFile);
     }
   };
 
-  const onClearAttachment = () => {
+  const onFileClear = () => {
     setNewAttachment("");
     fileInputRef.current.value = "";
   };
@@ -67,6 +86,7 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
     event.preventDefault();
 
     let attachmentUrl = "";
+
     if (newAttachment !== "") {
       const attachmentRef = storageService
         .ref()
@@ -85,6 +105,7 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
 
   const onDeleteClick = async () => {
     const ok = window.confirm("트윗을 삭제하시겠습니까?");
+
     if (ok) {
       await dbService.doc(`tweets/${tweetObj.id}`).delete();
       if (tweetObj.attachmentUrl !== "") {
@@ -94,37 +115,33 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
   };
 
   return (
-    <div className="tweet">
-      <div className="tweet-header">
-        <div className="tweet-header__profile">
-          <img
+    <Wrapper>
+      <Header>
+        <HeaderProfile>
+          <Photo
             src={
               tweetObj.creatorPhotoUrl ||
               process.env.PUBLIC_URL + "/assets/default-profile.jpg"
             }
           />
-        </div>
-        <div className="tweet-header__info">
-          <div className="tweet-header__info-username">
-            {tweetObj.creatorName}
-          </div>
-          <div className="tweet-header__info-createdAt">
-            {getDate(tweetObj.createdAt)}
-          </div>
-        </div>
+        </HeaderProfile>
+        <HeaderInfo>
+          <Username>{tweetObj.creatorName}</Username>
+          <CreatedAt>{getDate(tweetObj.createdAt)}</CreatedAt>
+        </HeaderInfo>
         {isOwner && (
-          <div className="tweet-header__menu">
-            <button onClick={onEditClick} className="tweet-header__menu-icon">
-              <i className="fa-solid fa-pencil"></i>
-            </button>
-            <button onClick={onDeleteClick} className="tweet-header__menu-icon">
-              <i className="fa-solid fa-trash-can"></i>
-            </button>
-          </div>
+          <HeaderToolbar>
+            <ToolbarButton onClick={onEditClick}>
+              <ToolbarButtonIcon icon={faPencil} />
+            </ToolbarButton>
+            <ToolbarButton onClick={onDeleteClick}>
+              <ToolbarButtonIcon icon={faTrashCan} />
+            </ToolbarButton>
+          </HeaderToolbar>
         )}
-      </div>
-      <form onSubmit={onSubmit} className="tweet-main">
-        <textarea
+      </Header>
+      <Main onSubmit={onSubmit}>
+        <Textarea
           value={newTweet}
           onChange={onChange}
           disabled={!isEditing}
@@ -141,37 +158,137 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
           hidden
         />
         {newAttachment && (
-          <div className="tweet-main__preview">
-            <img src={newAttachment} />
-            <button
+          <Preview>
+            <PreviewImg src={newAttachment} />
+            <ClearButton
               type="button"
-              onClick={onClearAttachment}
-              className="tweet-clear"
+              onClick={onFileClear}
               disabled={!isEditing}
             >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
+              <ClearButtonIcon icon={faXmark} />
+            </ClearButton>
+          </Preview>
         )}
         {isEditing && (
-          <div className="tweet-main__toolbar">
-            <div className="tweet-main__toolbar-left">
-              <button
-                type="button"
-                className="tweet-button"
-                onClick={onFileClick}
-              >
-                <i className="fa-solid fa-image"></i>
-              </button>
-            </div>
-            <div className="tweet-main__toolbar-right">
-              <span className="tweet-length">{newTweet.length}/120</span>
-              <input type="submit" value="Tweet" className="tweet-submit" />
-            </div>
-          </div>
+          <TweetToolbar
+            onFileClick={onFileClick}
+            length={newTweet.length}
+            disabled={!isLengthValid}
+          />
         )}
-      </form>
-    </div>
+      </Main>
+    </Wrapper>
   );
 };
 export default Tweet;
+
+const Wrapper = styled.article`
+  width: 100%;
+  padding: 5%;
+  padding-right: 2.5%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 5px solid var(--area-color);
+`;
+
+const Header = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+`;
+
+const HeaderProfile = styled.div`
+  width: calc(40px + 4%);
+`;
+
+const Photo = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const HeaderInfo = styled.div`
+  flex: 1;
+  padding-top: 3px;
+  font-size: var(--fs-basic);
+`;
+
+const Username = styled.div`
+  margin-bottom: 5px;
+  font-weight: 700;
+`;
+
+const CreatedAt = styled.div`
+  color: var(--sub-text-color);
+  font-size: var(--fs-sm);
+`;
+
+const HeaderToolbar = styled.div`
+  display: flex;
+`;
+
+const ToolbarButton = styled.button`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--sub-color);
+      color: var(--main-color);
+    }
+  }
+`;
+
+const ToolbarButtonIcon = styled(FontAwesomeIcon)`
+  font-size: var(--fs-basic);
+`;
+
+const Main = styled.form`
+  width: 97.5%;
+  padding: 20px 0;
+  font-size: var(--fs-lg);
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  height: fit-content;
+  resize: none;
+  border-radius: var(--radius-sm);
+  outline: 1px solid var(--border-color);
+
+  &:disabled {
+    outline: none;
+  }
+`;
+
+const Preview = styled.div`
+  position: relative;
+  width: fit-content;
+  margin: 10px 0;
+`;
+
+const PreviewImg = styled.img`
+  max-width: 90%;
+`;
+
+const ClearButton = styled.button`
+  position: absolute;
+  top: 0;
+  padding: 1px 10px;
+  cursor: pointer;
+
+  &:disabled {
+    display: none;
+  }
+`;
+
+const ClearButtonIcon = styled(FontAwesomeIcon)`
+  font-size: var(--fs-basic);
+`;

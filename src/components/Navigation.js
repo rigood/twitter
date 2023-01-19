@@ -1,5 +1,9 @@
 import { NavLink } from "react-router-dom";
+import styled from "styled-components";
 import { authService } from "fbase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faUser, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 function Navigation() {
   const onLogOutClick = () => {
@@ -10,33 +14,82 @@ function Navigation() {
   };
 
   return (
-    <nav className="nav">
-      <ul>
-        <li className="nav-left">
-          <NavLink
+    <Nav>
+      <Wrapper>
+        <Left>
+          <NavItemLink
             exact
             to="/"
             title="홈으로 이동"
             activeClassName="nav-active"
           >
-            <i className="fa-brands fa-twitter"></i>
-          </NavLink>
-        </li>
-        <li className="nav-right">
-          <NavLink
+            <Icon icon={faTwitter} />
+          </NavItemLink>
+        </Left>
+        <Right>
+          <NavItemLink
             to="/profile"
             title="프로필로 이동"
             activeClassName="nav-active"
           >
-            <i className="fa-solid fa-user"></i>
-          </NavLink>
-          <a onClick={onLogOutClick} title="로그아웃">
-            <i className="fa-solid fa-right-from-bracket"></i>
-          </a>
-        </li>
-      </ul>
-    </nav>
+            <Icon icon={faUser} />
+          </NavItemLink>
+          <NavItemButton onClick={onLogOutClick} title="로그아웃">
+            <Icon icon={faRightFromBracket} />
+          </NavItemButton>
+        </Right>
+      </Wrapper>
+    </Nav>
   );
 }
 
 export default Navigation;
+
+const Nav = styled.nav`
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--inner-bg-color);
+  border-bottom: 1px solid var(--border-color);
+`;
+
+const Wrapper = styled.ul`
+  height: 100%;
+  padding: 0 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Left = styled.li``;
+
+const Right = styled.li`
+  display: flex;
+  align-items: center;
+  a,
+  button {
+    margin-left: 15px;
+  }
+`;
+
+const NavItemLink = styled(NavLink)`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &.nav-active {
+    background-color: var(--sub-color);
+  }
+`;
+
+const NavItemButton = styled.button``;
+
+const Icon = styled(FontAwesomeIcon)`
+  color: var(--main-color);
+  font-size: var(--fs-button);
+`;

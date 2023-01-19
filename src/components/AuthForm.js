@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
 import { authService } from "fbase";
 
 function AuthForm({ isLoginPage }) {
@@ -54,50 +55,109 @@ function AuthForm({ isLoginPage }) {
 
   return (
     <>
-      <form onSubmit={onSubmit} className="auth-form">
-        <div className="auth-input-group">
-          <input
+      <Form onSubmit={onSubmit}>
+        <InputGroup>
+          <Input
             type="email"
             name="email"
             id="email"
-            className="auth-input"
             placeholder="이메일 주소"
             value={email}
             onChange={onChange}
             required
           />
-          <label htmlFor="email" className="auth-label">
-            이메일
-          </label>
-        </div>
-        <div className="auth-input-group">
-          <input
+          <Label htmlFor="email">이메일</Label>
+        </InputGroup>
+
+        <InputGroup>
+          <Input
             type="password"
             name="password"
             id="password"
-            className="auth-input"
             placeholder="비밀번호"
             value={password}
-            minLength={6}
             onChange={onChange}
             required
+            minLength={6}
             ref={passwordInputRef}
           />
-          <label htmlFor="password" className="auth-label">
-            비밀번호
-          </label>
-        </div>
-        {error && <div className="auth-error-msg">{error}</div>}
-        <button
+          <Label htmlFor="password">비밀번호</Label>
+        </InputGroup>
+
+        {error && <ErrorMsg>{error}</ErrorMsg>}
+
+        <SubmitButton
           type="submit"
-          className="auth-submit"
           disabled={!isEmailValid || !isPasswordValid}
         >
           {isLoginPage ? "로그인" : "가입"}
-        </button>
-      </form>
+        </SubmitButton>
+      </Form>
     </>
   );
 }
 
 export default AuthForm;
+
+const Form = styled.form`
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: 30px;
+`;
+
+const Label = styled.label`
+  margin-bottom: 10px;
+`;
+
+const Input = styled.input`
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  padding: 15px;
+  font-size: var(--fs-basic);
+  font-weight: 700;
+
+  &::placeholder {
+    color: var(--sub-text-color);
+    font-size: var(--fs-basic);
+    font-weight: 400;
+  }
+
+  &:focus {
+    outline: 2px solid var(--main-color);
+  }
+
+  &:focus + ${Label} {
+    color: var(--main-color);
+  }
+
+  &:focus::placeholder {
+    color: transparent;
+  }
+`;
+
+const ErrorMsg = styled.div`
+  margin-bottom: 30px;
+  color: var(--error-msg-color);
+`;
+
+const SubmitButton = styled.button`
+  cursor: pointer;
+  margin-bottom: 30px;
+  padding: 15px;
+  border-radius: var(--radius-lg);
+  background-color: var(--main-color);
+  color: white;
+  font-size: var(--fs-button);
+  font-weight: 700;
+
+  &:disabled {
+    opacity: 0.3;
+  }
+`;
