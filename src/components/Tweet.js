@@ -31,13 +31,29 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
 
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
+  const hiddenSubmitButtonRef = useRef(null);
 
   useEffect(() => {
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
   }, [newTweet]);
 
-  const onEditClick = () => setIsEditing((prev) => !prev);
+  const onEditClick = () => {
+    if (!isEditing) {
+      setIsEditing(true);
+    } else {
+      const willSave = window.confirm("변경한 내용을 저장하시겠습니까?");
+
+      if (willSave) {
+        hiddenSubmitButtonRef.current.click();
+      } else {
+        setIsEditing(false);
+        setNewTweet(tweetObj.text);
+        setNewAttachment(tweetObj.attachmentUrl);
+        setIsLengthValid(true);
+      }
+    }
+  };
 
   const onChange = (event) => {
     const {
@@ -87,12 +103,19 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
 
     let attachmentUrl = "";
 
-    if (newAttachment !== "") {
-      const attachmentRef = storageService
-        .ref()
-        .child(`${userObj.id}/${uuidv4()}`);
-      const response = await attachmentRef.putString(newAttachment, "data_url");
-      attachmentUrl = await response.ref.getDownloadURL();
+    if (tweetObj.attachmentUrl !== newAttachment) {
+      if (newAttachment !== "") {
+        const attachmentRef = storageService
+          .ref()
+          .child(`${userObj.id}/${uuidv4()}`);
+
+        const response = await attachmentRef.putString(
+          newAttachment,
+          "data_url"
+        );
+
+        attachmentUrl = await response.ref.getDownloadURL();
+      }
     }
 
     await dbService.doc(`tweets/${tweetObj.id}`).update({
@@ -170,11 +193,14 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
           </Preview>
         )}
         {isEditing && (
-          <TweetToolbar
-            onFileClick={onFileClick}
-            length={newTweet.length}
-            disabled={!isLengthValid}
-          />
+          <>
+            <TweetToolbar
+              onFileClick={onFileClick}
+              length={newTweet.length}
+              disabled={!isLengthValid}
+            />
+            <button type="submit" hidden ref={hiddenSubmitButtonRef} />
+          </>
         )}
       </Main>
     </Wrapper>
