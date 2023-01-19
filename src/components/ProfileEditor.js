@@ -19,6 +19,8 @@ function ProfileEditor({ userObj, refreshUser }) {
     }
   }, [mode]);
 
+  console.log(userObj);
+
   const onButtonClick = () => {
     if (mode === "view") {
       setMode("edit");
@@ -74,7 +76,7 @@ function ProfileEditor({ userObj, refreshUser }) {
 
     if (userObj.name !== newName) {
       await userObj.updateProfile({
-        name: newName,
+        displayName: newName,
       });
       refreshUser();
     }
@@ -84,7 +86,7 @@ function ProfileEditor({ userObj, refreshUser }) {
       const response = await photoRef.putString(newPhotoUrl, "data_url");
       const url = await response.ref.getDownloadURL();
       await userObj.updateProfile({
-        photoUrl: url,
+        photoURL: url,
       });
       refreshUser();
     }
