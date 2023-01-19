@@ -19,8 +19,6 @@ function ProfileEditor({ userObj, refreshUser }) {
     }
   }, [mode]);
 
-  console.log(userObj);
-
   const onButtonClick = () => {
     if (mode === "view") {
       setMode("edit");

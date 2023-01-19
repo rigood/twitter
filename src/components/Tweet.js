@@ -90,7 +90,7 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
     if (newAttachment !== "") {
       const attachmentRef = storageService
         .ref()
-        .child(`${userObj.uid}/${uuidv4()}`);
+        .child(`${userObj.id}/${uuidv4()}`);
       const response = await attachmentRef.putString(newAttachment, "data_url");
       attachmentUrl = await response.ref.getDownloadURL();
     }
