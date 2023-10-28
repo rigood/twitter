@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { authService } from "fbase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,10 +6,13 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faUser, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 function Navigation() {
+  const history = useHistory();
+
   const onLogOutClick = () => {
     const ok = window.confirm("로그아웃 하시겠습니까?");
     if (ok) {
       authService.signOut();
+      history.push("/");
     }
   };
 
@@ -80,7 +83,6 @@ const NavItemLink = styled(NavLink)`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 
   &.nav-active {
     background-color: var(--sub-color);

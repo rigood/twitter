@@ -2,7 +2,13 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 
-function TweetToolbar({ onFileClick, length, disabled }) {
+function TweetToolbar({
+  onFileClick,
+  length,
+  disabled,
+  uploadTweet,
+  isUploadingTweet,
+}) {
   return (
     <Toolbar>
       <ToolbarGroup>
@@ -12,9 +18,9 @@ function TweetToolbar({ onFileClick, length, disabled }) {
       </ToolbarGroup>
       <ToolbarGroup>
         <Length>{length}/120</Length>
-        <SubmitButton type="submit" disabled={disabled}>
-          Tweet
-        </SubmitButton>
+        <TweetButton type="button" disabled={disabled} onClick={uploadTweet}>
+          {isUploadingTweet ? "Uploading..." : "Tweet"}
+        </TweetButton>
       </ToolbarGroup>
     </Toolbar>
   );
@@ -40,7 +46,6 @@ const UploadButton = styled.button`
   justify-content: center;
   align-items: center;
   padding: 5px;
-  cursor: pointer;
 `;
 
 const UploadButtonIcon = styled(FontAwesomeIcon)`
@@ -52,7 +57,7 @@ const Length = styled.span`
   font-size: var(--fs-sm);
 `;
 
-const SubmitButton = styled.button`
+const TweetButton = styled.button`
   margin: 0 10px;
   padding: 5px 10px;
   background-color: var(--main-color);
@@ -66,5 +71,6 @@ const SubmitButton = styled.button`
 
   &:disabled {
     opacity: 0.5;
+    cursor: default;
   }
 `;

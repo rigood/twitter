@@ -1,39 +1,47 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { authService, firebaseInstance } from "fbase";
 
 function AuthSocialLogin() {
+  const [error, setError] = useState("");
+
   const onSocialClick = async (event) => {
     const {
-      target: { name },
+      currentTarget: { name },
     } = event;
 
     let provider;
 
-    if (name === "google") {
-      provider = new firebaseInstance.auth.GoogleAuthProvider();
-    } else if (name === "github") {
-      provider = new firebaseInstance.auth.GithubAuthProvider();
-    }
+    try {
+      if (name === "google") {
+        provider = new firebaseInstance.auth.GoogleAuthProvider();
+      } else if (name === "github") {
+        provider = new firebaseInstance.auth.GithubAuthProvider();
+      }
 
-    await authService.signInWithPopup(provider);
+      await authService.signInWithPopup(provider);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
     <Container>
-      <SocialLoginButton name="google" onClick={onSocialClick}>
+      <Button name="google" onClick={onSocialClick}>
         <Logo
           alt="구글 로고"
           src={process.env.PUBLIC_URL + "/assets/google.ico"}
         />
         <Text>구글 계정으로 로그인</Text>
-      </SocialLoginButton>
-      <SocialLoginButton name="github" onClick={onSocialClick}>
+      </Button>
+      <Button name="github" onClick={onSocialClick}>
         <Logo
           alt="깃허브 로고"
           src={process.env.PUBLIC_URL + "/assets/github.png"}
         />
         <Text>깃허브 계정으로 로그인</Text>
-      </SocialLoginButton>
+      </Button>
+      <ErrorMsg>{error}</ErrorMsg>
     </Container>
   );
 }
@@ -42,16 +50,15 @@ export default AuthSocialLogin;
 
 const Container = styled.div`
   width: 85%;
-  margin: 0 auto;
+  margin: 0 auto 20px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  align-items: center;
 `;
 
-const SocialLoginButton = styled.button`
-  cursor: pointer;
-  width: 100%;
+const Button = styled.button`
   position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -78,4 +85,10 @@ const Logo = styled.img`
 const Text = styled.span`
   flex: 1;
   margin-left: 30px;
+`;
+
+const ErrorMsg = styled.div`
+  margin-top: 20px;
+  color: var(--error-msg-color);
+  word-break: break-word;
 `;

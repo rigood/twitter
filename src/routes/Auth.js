@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import AuthForm from "components/AuthForm";
-import AuthSocialLogin from "components/AuthSocialLogin";
+import AuthForm from "components/Auth/AuthForm";
+import AuthSocialLogin from "components/Auth/AuthSocialLogin";
 
 const Auth = () => {
   const [isLoginPage, setIsLoginPage] = useState(true);
@@ -18,12 +18,12 @@ const Auth = () => {
       <AuthForm isLoginPage={isLoginPage} />
 
       <AuthToggle>
-        <ToggleText>
+        <AuthToggleText>
           {isLoginPage ? "처음이신가요?" : "이미 회원이신가요?"}
-        </ToggleText>
-        <ToggleButton type="button" onClick={toggleAuthPage}>
+        </AuthToggleText>
+        <AuthToggleButton type="button" onClick={toggleAuthPage}>
           {isLoginPage ? "회원가입" : "로그인"}
-        </ToggleButton>
+        </AuthToggleButton>
       </AuthToggle>
 
       {isLoginPage && <AuthSocialLogin />}
@@ -55,12 +55,12 @@ const AuthToggle = styled.div`
   margin-bottom: 50px;
 `;
 
-const ToggleText = styled.span`
+const AuthToggleText = styled.span`
   font-size: var(--fs-basic);
 `;
 
-const ToggleButton = styled.button`
-  cursor: pointer;
+const AuthToggleButton = styled.button`
   margin-left: 3px;
   color: var(--main-color);
+  font-size: var(--fs-basic);
 `;

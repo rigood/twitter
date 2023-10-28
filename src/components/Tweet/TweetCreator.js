@@ -6,15 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import TweetToolbar from "./TweetToolbar";
 
+export const MAX_LENGTH_OF_TWEET = 120;
+
 function TweetCreator({ userObj }) {
   const [tweet, setTweet] = useState("");
-  const [isLengthValid, setIsLengthValid] = useState(false);
+  const [isTweetLengthValid, setIsTweetLengthValid] = useState(false);
   const [attachment, setAttachment] = useState("");
+  const [isUploadingTweet, setIsUploadingTweet] = useState(false);
 
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const onChange = (event) => {
+  const onTweetChange = (event) => {
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
 
@@ -23,12 +26,16 @@ function TweetCreator({ userObj }) {
     } = event;
 
     if (value !== "") {
-      setIsLengthValid(true);
+      setIsTweetLengthValid(true);
     } else {
-      setIsLengthValid(false);
+      setIsTweetLengthValid(false);
     }
 
-    setTweet(value);
+    if (value.length > MAX_LENGTH_OF_TWEET) {
+      setTweet(value.substr(0, MAX_LENGTH_OF_TWEET));
+    } else {
+      setTweet(value);
+    }
   };
 
   const onFileClick = () => {
@@ -60,16 +67,18 @@ function TweetCreator({ userObj }) {
     fileInputRef.current.value = "";
   };
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-
+  const uploadTweet = async () => {
     let attachmentUrl = "";
+
+    setIsUploadingTweet(true);
 
     if (attachment !== "") {
       const attachmentRef = storageService
         .ref()
         .child(`${userObj.uid}/${uuidv4()}`);
+
       const response = await attachmentRef.putString(attachment, "data_url");
+
       attachmentUrl = await response.ref.getDownloadURL();
     }
 
@@ -86,27 +95,21 @@ function TweetCreator({ userObj }) {
 
     setTweet("");
     setAttachment("");
-    setIsLengthValid(false);
+    setIsTweetLengthValid(false);
+    setIsUploadingTweet(false);
     fileInputRef.current.value = "";
   };
 
   return (
     <Container>
       <Profile>
-        <Photo
-          src={
-            userObj.photoURL ||
-            process.env.PUBLIC_URL + "/assets/default-profile.jpg"
-          }
-        />
+        <Photo alt="프로필 사진" src={userObj.photoUrl} />
       </Profile>
-      <Write onSubmit={onSubmit}>
+      <Write>
         <Textarea
           value={tweet}
-          onChange={onChange}
+          onChange={onTweetChange}
           placeholder="What's on your mind?"
-          maxLength={120}
-          required
           ref={textareaRef}
         />
         <input
@@ -127,7 +130,9 @@ function TweetCreator({ userObj }) {
         <TweetToolbar
           onFileClick={onFileClick}
           length={tweet.length}
-          disabled={!isLengthValid}
+          disabled={!isTweetLengthValid || isUploadingTweet}
+          uploadTweet={uploadTweet}
+          isUploadingTweet={isUploadingTweet}
         />
       </Write>
     </Container>
@@ -190,7 +195,6 @@ const ClearButton = styled.button`
   position: absolute;
   top: 0;
   padding: 1px 10px;
-  cursor: pointer;
 `;
 
 const ClearButtonIcon = styled(FontAwesomeIcon)`

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { dbService } from "fbase";
-import Tweet from "components/Tweet";
-import ProfileEditor from "components/ProfileEditor";
+import Tweet from "components/Tweet/Tweet";
+import ProfileEditor from "components/Profile/ProfileEditor";
 
 const Profile = ({ userObj, refreshUser }) => {
   const [myTweets, setMyTweets] = useState([]);
@@ -19,7 +19,7 @@ const Profile = ({ userObj, refreshUser }) => {
         }));
         setMyTweets(tweetArray);
       });
-  }, []);
+  }, [userObj.id]);
 
   return (
     <>
@@ -29,7 +29,7 @@ const Profile = ({ userObj, refreshUser }) => {
           key={tweet.id}
           tweetObj={tweet}
           userObj={userObj}
-          isOwner={tweet.creatorId === userObj.id}
+          isCreator={tweet.creatorId === userObj.id}
         />
       ))}
       {myTweets.length === 0 && <EmptyMsg>작성한 트윗이 없습니다.</EmptyMsg>}

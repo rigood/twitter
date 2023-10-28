@@ -9,6 +9,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import TweetToolbar from "./TweetToolbar";
+import { MAX_LENGTH_OF_TWEET } from "./TweetCreator";
 
 function getDate(milliseconds) {
   const date = new Date(milliseconds);
@@ -23,50 +24,64 @@ function getDate(milliseconds) {
   return date.toLocaleString("ko-KR", options);
 }
 
-const Tweet = ({ tweetObj, userObj, isOwner }) => {
-  const [isEditing, setIsEditing] = useState(false);
+const Tweet = ({ tweetObj, userObj, isCreator }) => {
+  const [isEditingTweet, setIsEditingTweet] = useState(false);
   const [newTweet, setNewTweet] = useState(tweetObj.text);
   const [newAttachment, setNewAttachment] = useState(tweetObj.attachmentUrl);
-  const [isLengthValid, setIsLengthValid] = useState(true);
+  const [isTweetLengthValid, setIsTweetLengthValid] = useState(true);
+  const [isUploadingTweet, setIsUploadingTweet] = useState(false);
 
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
-  const hiddenSubmitButtonRef = useRef(null);
+
+  const editTweet = () => {
+    if (!isEditingTweet) {
+      setIsEditingTweet(true);
+    } else {
+      const ok = window.confirm("변경한 내용을 저장하시겠습니까?");
+
+      if (ok) {
+        uploadTweet();
+      } else {
+        setIsEditingTweet(false);
+        setNewTweet(tweetObj.text);
+        setNewAttachment(tweetObj.attachmentUrl);
+        setIsTweetLengthValid(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isEditingTweet) {
+      textareaRef.current.focus();
+    }
+  }, [isEditingTweet]);
 
   useEffect(() => {
     textareaRef.current.style.height = "auto";
     textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
   }, [newTweet]);
 
-  const onEditClick = () => {
-    if (!isEditing) {
-      setIsEditing(true);
-    } else {
-      const willSave = window.confirm("변경한 내용을 저장하시겠습니까?");
-
-      if (willSave) {
-        hiddenSubmitButtonRef.current.click();
-      } else {
-        setIsEditing(false);
-        setNewTweet(tweetObj.text);
-        setNewAttachment(tweetObj.attachmentUrl);
-        setIsLengthValid(true);
-      }
-    }
+  const onTweetFocus = (event) => {
+    event.target.selectionStart = event.target.value.length;
   };
 
-  const onChange = (event) => {
+  const onTweetChange = (event) => {
     const {
       target: { value },
     } = event;
 
     if (value !== "") {
-      setIsLengthValid(true);
+      setIsTweetLengthValid(true);
     } else {
-      setIsLengthValid(false);
+      setIsTweetLengthValid(false);
     }
 
-    setNewTweet(value);
+    if (value.length > MAX_LENGTH_OF_TWEET) {
+      setNewTweet(value.substr(0, MAX_LENGTH_OF_TWEET));
+    } else {
+      setNewTweet(value);
+    }
   };
 
   const onFileClick = () => {
@@ -98,13 +113,17 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
     fileInputRef.current.value = "";
   };
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
+  const uploadTweet = async () => {
+    let attachmentUrl;
 
-    let attachmentUrl = "";
+    setIsUploadingTweet(true);
 
     if (tweetObj.attachmentUrl !== newAttachment) {
-      if (newAttachment !== "") {
+      if (newAttachment.startsWith("https")) {
+        attachmentUrl = newAttachment;
+      } else if (newAttachment === "") {
+        attachmentUrl = "";
+      } else {
         const attachmentRef = storageService
           .ref()
           .child(`${userObj.id}/${uuidv4()}`);
@@ -123,10 +142,11 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
       attachmentUrl,
     });
 
-    setIsEditing(false);
+    setIsEditingTweet(false);
+    setIsUploadingTweet(false);
   };
 
-  const onDeleteClick = async () => {
+  const deleteTweet = async () => {
     const ok = window.confirm("트윗을 삭제하시겠습니까?");
 
     if (ok) {
@@ -152,24 +172,23 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
           <Username>{tweetObj.creatorName}</Username>
           <CreatedAt>{getDate(tweetObj.createdAt)}</CreatedAt>
         </HeaderInfo>
-        {isOwner && (
+        {isCreator && (
           <HeaderToolbar>
-            <ToolbarButton onClick={onEditClick}>
+            <ToolbarButton onClick={editTweet}>
               <ToolbarButtonIcon icon={faPencil} />
             </ToolbarButton>
-            <ToolbarButton onClick={onDeleteClick}>
+            <ToolbarButton onClick={deleteTweet}>
               <ToolbarButtonIcon icon={faTrashCan} />
             </ToolbarButton>
           </HeaderToolbar>
         )}
       </Header>
-      <Main onSubmit={onSubmit}>
+      <Main onSubmit={uploadTweet}>
         <Textarea
           value={newTweet}
-          onChange={onChange}
-          disabled={!isEditing}
-          maxLength={120}
-          required
+          onChange={onTweetChange}
+          onFocus={onTweetFocus}
+          disabled={!isEditingTweet}
           ref={textareaRef}
           rows={1}
         />
@@ -186,21 +205,20 @@ const Tweet = ({ tweetObj, userObj, isOwner }) => {
             <ClearButton
               type="button"
               onClick={onFileClear}
-              disabled={!isEditing}
+              disabled={!isEditingTweet}
             >
               <ClearButtonIcon icon={faXmark} />
             </ClearButton>
           </Preview>
         )}
-        {isEditing && (
-          <>
-            <TweetToolbar
-              onFileClick={onFileClick}
-              length={newTweet.length}
-              disabled={!isLengthValid}
-            />
-            <button type="submit" hidden ref={hiddenSubmitButtonRef} />
-          </>
+        {isEditingTweet && (
+          <TweetToolbar
+            onFileClick={onFileClick}
+            length={newTweet.length}
+            disabled={!isTweetLengthValid || isUploadingTweet}
+            uploadTweet={uploadTweet}
+            isUploadingTweet={isUploadingTweet}
+          />
         )}
       </Main>
     </Wrapper>
@@ -242,6 +260,7 @@ const HeaderInfo = styled.div`
 
 const Username = styled.div`
   margin-bottom: 5px;
+  font-size: var(--fs-basic);
   font-weight: 700;
 `;
 
@@ -262,7 +281,6 @@ const ToolbarButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -276,10 +294,10 @@ const ToolbarButtonIcon = styled(FontAwesomeIcon)`
   font-size: var(--fs-basic);
 `;
 
-const Main = styled.form`
+const Main = styled.div`
   width: 97.5%;
   padding: 20px 0;
-  font-size: var(--fs-lg);
+  font-size: var(--fs-basic);
 `;
 
 const Textarea = styled.textarea`
@@ -288,6 +306,7 @@ const Textarea = styled.textarea`
   resize: none;
   border-radius: var(--radius-sm);
   outline: 1px solid var(--border-color);
+  line-height: 1.3;
 
   &:disabled {
     outline: none;
@@ -308,7 +327,6 @@ const ClearButton = styled.button`
   position: absolute;
   top: 0;
   padding: 1px 10px;
-  cursor: pointer;
 
   &:disabled {
     display: none;

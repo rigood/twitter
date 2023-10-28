@@ -64,31 +64,32 @@ function ProfileEditor({ userObj, refreshUser }) {
   };
 
   const updateProfile = async () => {
-    setMode("loading");
-
     if (newName === "") {
       alert("1글자 이상 입력해주세요.");
       setMode("edit");
+      nameInputRef.current.focus();
       return;
     }
+
+    setMode("loading");
 
     if (userObj.name !== newName) {
       await userObj.updateProfile({
         displayName: newName,
       });
-      refreshUser();
     }
 
     if (userObj.photoUrl !== newPhotoUrl) {
       const photoRef = storageService.ref().child(`${userObj.id}/${uuidv4()}`);
       const response = await photoRef.putString(newPhotoUrl, "data_url");
       const url = await response.ref.getDownloadURL();
+
       await userObj.updateProfile({
         photoURL: url,
       });
-      refreshUser();
     }
 
+    refreshUser();
     setMode("view");
   };
 
@@ -102,12 +103,7 @@ function ProfileEditor({ userObj, refreshUser }) {
           ref={fileInputRef}
           hidden
         />
-        <Photo
-          src={
-            newPhotoUrl ||
-            process.env.PUBLIC_URL + "/assets/default-profile.jpg"
-          }
-        />
+        <Photo src={newPhotoUrl} />
         {mode === "edit" && (
           <UploadButton onClick={onFileClick}>
             <UploadButtonIcon icon={faImage} />
@@ -124,10 +120,10 @@ function ProfileEditor({ userObj, refreshUser }) {
           ref={nameInputRef}
         />
       </Name>
-      <EditModeButton onClick={onButtonClick}>
+      <EditModeButton onClick={onButtonClick} mode={mode}>
         {mode === "edit" && "프로필 저장"}
         {mode === "view" && "프로필 변경"}
-        {mode === "loading" && "저장중"}
+        {mode === "loading" && "저장중..."}
       </EditModeButton>
     </Wrapper>
   );
@@ -169,7 +165,6 @@ const UploadButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 `;
 
 const UploadButtonIcon = styled(FontAwesomeIcon)`
@@ -191,11 +186,16 @@ const NameInput = styled.input`
   width: 100%;
   text-align: center;
   padding: 5px;
+  border-radius: var(--radius-sm);
   font-size: var(--fs-lg);
   font-weight: 700;
 
   &:enabled {
     background-color: white;
+  }
+
+  &:focus {
+    outline: 2px solid var(--main-color);
   }
 `;
 
@@ -207,5 +207,5 @@ const EditModeButton = styled.button`
   background-color: var(--main-color);
   color: white;
   font-size: var(--fs-sm);
-  cursor: pointer;
+  cursor: ${({ mode }) => mode === "loading" && "default"};
 `;

@@ -148,7 +148,6 @@ const ErrorMsg = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  cursor: pointer;
   margin-bottom: 30px;
   padding: 15px;
   border-radius: var(--radius-lg);

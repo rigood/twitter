@@ -29,8 +29,11 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   border: none;
-  outline: none;
   background-color: transparent;
+}
+
+button{
+  cursor: pointer;
 }
 
 input::placeholder {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import { authService } from "fbase";
+import styled from "styled-components";
 import GlobalStyle from "styles/GloablStyle";
-import Loader from "components/Loader";
+import Loader from "components/Loader/Loader";
 import Router from "./Router";
 
 function App() {
