@@ -1,4 +1,4 @@
-import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 import Navigation from "components/Navigation/Navigation";
 import Home from "routes/Home";
 import Profile from "routes/Profile";
@@ -16,9 +16,6 @@ const Router = ({ isLoggedIn, userObj, refreshUser }) => {
             </Route>
             <Route exact path="/profile">
               <Profile userObj={userObj} refreshUser={refreshUser} />
-            </Route>
-            <Route>
-              <Redirect to="/" />
             </Route>
           </>
         ) : (
