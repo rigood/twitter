@@ -11,7 +11,10 @@ const Auth = () => {
   return (
     <>
       <AuthHeader>
-        <Logo alt="트위터 로고" src={process.env.PUBLIC_URL + "/favicon.ico"} />
+        <Logo
+          alt="트위터 로고"
+          src={process.env.PUBLIC_URL + "/assets/twitter.ico"}
+        />
         <Title>{isLoginPage ? "로그인" : "회원가입"}</Title>
       </AuthHeader>
 

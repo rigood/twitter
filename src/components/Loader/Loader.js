@@ -3,11 +3,11 @@ import styled, { keyframes } from "styled-components";
 function Loader() {
   return (
     <Wrapper>
-      <Logo
+      <Image
         alt="트위터 로고"
-        src={process.env.PUBLIC_URL + "/favicon.ico"}
-      ></Logo>
-      <Title>사용자 정보를 불러오는 중</Title>
+        src={process.env.PUBLIC_URL + "/assets/twitter.ico"}
+      />
+      <Text>사용자 정보를 불러오는 중</Text>
     </Wrapper>
   );
 }
@@ -15,11 +15,11 @@ function Loader() {
 export default Loader;
 
 const Wrapper = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 100px;
 `;
 
 const boom = keyframes`
@@ -32,11 +32,11 @@ const boom = keyframes`
   }
 `;
 
-const Logo = styled.img`
+const Image = styled.img`
   animation: ${boom} 1s ease-in-out infinite;
 `;
 
-const Title = styled.h1`
+const Text = styled.div`
   margin-top: 20px;
   font-size: var(--fs-basic);
   text-align: center;
